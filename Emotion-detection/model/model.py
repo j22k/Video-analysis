@@ -1,15 +1,9 @@
-import os
-import numpy as np
-import cv2
-import mediapipe as mp
+# File: Emotion-detection/model/model.py
+
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from PIL import Image
-from torchvision import transforms
-import math  # Import the math module
-
-MODEL_DIR = os.path.dirname(os.path.abspath(__file__))
+import math
 
 class Bottleneck(nn.Module):
     expansion = 4
@@ -24,7 +18,7 @@ class Bottleneck(nn.Module):
         self.i_downsample = i_downsample
         self.stride = stride
         self.relu = nn.ReLU()
-        
+
     def forward(self, x):
         identity = x.clone()
         x = self.relu(self.batch_norm1(self.conv1(x)))
@@ -77,13 +71,13 @@ class ResNet(nn.Module):
         x = x.reshape(x.shape[0], -1)
         x = self.fc1(x)
         return x
-        
+
     def forward(self, x):
         x = self.extract_features(x)
         x = self.relu1(x)
         x = self.fc2(x)
         return x
-        
+
     def _make_layer(self, ResBlock, blocks, planes, stride=1):
         ii_downsample = None
         layers = []
@@ -97,7 +91,7 @@ class ResNet(nn.Module):
         for i in range(blocks-1):
             layers.append(ResBlock(self.in_channels, planes))
         return nn.Sequential(*layers)
-        
+
 def ResNet50(num_classes, channels=3):
     return ResNet(Bottleneck, [3, 4, 6, 3], num_classes, channels)
 
@@ -111,15 +105,9 @@ class LSTMPyTorch(nn.Module):
 
     def forward(self, x):
         x, _ = self.lstm1(x)
-        x, _ = self.lstm2(x)        
+        x, _ = self.lstm2(x)
         x = self.fc(x[:, -1, :])
         x = self.softmax(x)
         return x
-# Update the model loading code
-pth_backbone_model = ResNet50(7, channels=3)
-pth_backbone_model.load_state_dict(torch.load(os.path.join(MODEL_DIR, 'Emotion-detection/models/FER_static_ResNet50_AffectNet.pt')))
-pth_backbone_model.eval()
 
-pth_LSTM_model = LSTMPyTorch()
-pth_LSTM_model.load_state_dict(torch.load(os.path.join(MODEL_DIR, 'Emotion-detection/models/FER_dinamic_LSTM_Aff-Wild2.pt')))
-pth_LSTM_model.eval()
+# --- End of file. The problematic loading code has been removed. ---
