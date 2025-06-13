@@ -1,0 +1,45 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+venv/
+ENV/
+env/
+.venv/
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# PyInstaller
+*.spec
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+
+# Logs and local configs
+*.log
+.env
+*.sqlite3
+.DS_Store
+.idea/
+.vscode/
+*.bak
+
+# MyPy, Pyright, Pylint, etc.
+.mypy_cache/
+.pyright/
+.pytest_cache/
+
+# Media
+*.mp4
+*.avi
+*.wav
+*.mp3
+
+# Misc
+*.swp
+*.swo
