@@ -26,6 +26,14 @@ except ImportError as e:
     print("This might be due to a missing library like 'parselmouth' or 'librosa'.")
     sys.exit(1)
 
+try:
+    from Eyecontact import analyze_eye_contact
+except ImportError as e:
+    print(f"Fatal Error: Could not import the EyeContact module.")
+    print(f"Details: {e}")
+    print("This might be due to a missing library like 'mediapipe' or 'opencv-python'.")
+    sys.exit(1)
+    
 # --- Configuration ---
 video_path = 'videoplayback.mp4'
 
@@ -55,13 +63,13 @@ def summarize_emotion_data(results, method="summary"):
         min_confidence = min(confidences)
         
         summary = f"""
---- Emotion Detection Summary ---
-Total Frames Analyzed: {len(results)}
-Average Confidence: {avg_confidence:.2%}
-Confidence Range: {min_confidence:.2%} - {max_confidence:.2%}
+                    --- Emotion Detection Summary ---
+                    Total Frames Analyzed: {len(results)}
+                    Average Confidence: {avg_confidence:.2%}
+                    Confidence Range: {min_confidence:.2%} - {max_confidence:.2%}
 
-Emotion Distribution:"""
-        
+                    Emotion Distribution:"""
+            
         for emotion, count in emotion_counts.most_common():
             percentage = (count / len(results)) * 100
             summary += f"\n  {emotion}: {count} frames ({percentage:.1f}%)"
@@ -208,9 +216,9 @@ def run_analysis():
             print(summarize_emotion_data(results, method="summary"))
             
             # Uncomment below to see other methods:
-            # print("\n" + summarize_emotion_data(results, method="intervals"))
-            # print("\n" + summarize_emotion_data(results, method="changes"))
-            # print("\n" + summarize_emotion_data(results, method="confidence_threshold"))
+            print("\n" + summarize_emotion_data(results, method="intervals"))
+            print("\n" + summarize_emotion_data(results, method="changes"))
+            print("\n" + summarize_emotion_data(results, method="confidence_threshold"))
             
         else:
             print("\nNo emotions were detected in the video, or no faces were found.")
@@ -258,10 +266,26 @@ def run_analysis():
         import traceback
         traceback.print_exc()
         
+        
+    try:
+        # eye contact analysis from video
+        eye_contact_result = analyze_eye_contact(video_path)
+        if eye_contact_result:
+            print("\n--- Eye Contact Analysis Result ---")
+            print(eye_contact_result)
+        else:
+            print("No eye contact analysis result available.")
+    except Exception as eye_contact_error:
+        print(f"An error occurred during eye contact analysis: {eye_contact_error}")
+        import traceback
+        traceback.print_exc()
+        
     try:
         # Use the summarized emotion data for analysis instead of raw results
         emotion_summary = create_emotion_summary_for_analysis(results)
-        result = analyze_student_pitch(emotion_summary, audio_result, audio_text)
+        hr = 50 * "-"
+        print(f"\n\n\n Full data from all \n\n{hr} Emotion {hr}\n\n {emotion_summary} \n\n {hr} Audio analysis {hr} \n\n{audio_result} , \n\n{hr} Text {hr}\n\n {audio_text} \n\n{hr} Eye contact analysis {hr} \n\n {eye_contact_result}")
+        result = analyze_student_pitch(emotion_summary, audio_result, audio_text,eye_contact_result)
         if result:
             print("\n--- Student Pitch Performance Analysis ---")
             print(result)

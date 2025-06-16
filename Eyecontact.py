@@ -112,7 +112,7 @@ def analyze_eye_contact(video_path):
         return "0.00% contact loss"
 
 
-# if __name__ == "__main__":
-#     video_path = "eye_contact_analysis/lookingdown.mp4"  # Replace with your video path
-#     result = analyze_eye_contact(video_path)
-#     print(result)
+if __name__ == "__main__":
+    video_path = "videoplayback.mp4"  # Replace with your video path
+    result = analyze_eye_contact(video_path)
+    print(result)

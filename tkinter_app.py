@@ -419,9 +419,7 @@ Emotion Distribution:"""
             video_clip.audio.write_audiofile(
                 audio_path, 
                 codec='pcm_s16le',
-                fps=16000,
-                verbose=False,
-                logger=None
+                fps=16000
             )
             video_clip.close()
             
