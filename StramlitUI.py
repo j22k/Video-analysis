@@ -1,4 +1,14 @@
 import streamlit as st
+
+# Configure Streamlit page
+st.set_page_config(
+    page_title="AI Pitch Performance Analyzer",
+    page_icon="🎯",
+    layout="wide",
+    initial_sidebar_state="expanded"
+)
+
+
 import sys
 import os
 import threading
@@ -32,13 +42,6 @@ try:
 except ImportError as e:
     st.error(f"Warning: Could not import some modules: {e}")
 
-# Configure Streamlit page
-st.set_page_config(
-    page_title="AI Pitch Performance Analyzer",
-    page_icon="🎯",
-    layout="wide",
-    initial_sidebar_state="expanded"
-)
 
 # Custom CSS for futuristic styling
 st.markdown("""
