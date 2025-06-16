@@ -7,6 +7,8 @@ from collections import Counter
 from moviepy import VideoFileClip
 import io
 import contextlib
+from reportlab.lib.pagesizes import letter
+from reportlab.pdfgen import canvas
 import plotly.express as px
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
@@ -811,14 +813,38 @@ def main():
             
             st.markdown(comprehensive_report)
             
-            # Download report
+            # Build PDF in memory
+            pdf_buffer = io.BytesIO()
+            c = canvas.Canvas(pdf_buffer, pagesize=letter)
+            text = c.beginText(40, 750)
+            text.setFont("Courier", 10)
+
+            # Loop through each line of your markdown report
+            for line in comprehensive_report.splitlines():
+                # wrap long lines if needed (simple example)
+                for chunk in [line[i:i+95] for i in range(0, len(line), 95)]:
+                    text.textLine(chunk)
+            c.drawText(text)
+            c.showPage()
+            c.save()
+            pdf_buffer.seek(0)
+
             st.download_button(
-                label="📥 Download Full Report",
-                data=comprehensive_report,
+                label="📥 Download Full Report as PDF",
+                data=pdf_buffer,
                 file_name=f"pitch_analysis_report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.pdf",
-                mime="text/markdown",
+                mime="application/pdf",
                 use_container_width=True
             )
+
+            # Download report
+            # st.download_button(
+            #     label="📥 Download Full Report",
+            #     data=comprehensive_report,
+            #     file_name=f"pitch_analysis_report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.md",
+            #     mime="text/markdown",
+            #     use_container_width=True
+            # )
         
         # Performance Summary Cards
         st.markdown("---")
