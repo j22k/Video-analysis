@@ -19,6 +19,7 @@ try:
     from transcribe_audio import transcribe_audio
     from lanchain_deepseek import analyze_student_pitch
     from Audio_analsys import analyze_audio
+    from Eyecontact import analyze_eye_contact
 except ImportError as e:
     print(f"Warning: Could not import some modules: {e}")
 
@@ -306,6 +307,24 @@ class StudentPitchAnalyzerGUI:
                 self.root.after(0, lambda: self.transcription_text.insert(tk.END, error_msg))
                 audio_text = None
             
+            # Eye Contact Analysis
+            try:
+                self.log_to_console("Analyzing eye contact...")
+                eye_contact_result = analyze_eye_contact(video_path)
+                if eye_contact_result:
+                    self.analysis_results["Eye Contact Analysis"] = eye_contact_result
+                    self.root.after(0, lambda: self.final_text.insert(tk.END, eye_contact_result))
+                    self.log_to_console("Eye contact analysis completed successfully.")
+                else:
+                    error_msg = "No eye contact analysis results available."
+                    self.analysis_results["Eye Contact Analysis"] = error_msg
+                    self.root.after(0, lambda: self.final_text.insert(tk.END, error_msg))
+                    self.log_to_console(error_msg)
+            except Exception as e:
+                error_msg = f"Error during eye contact analysis: {str(e)}"
+                self.log_to_console(error_msg)
+                self.root.after(0, lambda: self.final_text.insert(tk.END, error_msg))
+            
             # Final Analysis
             try:
                 self.log_to_console("Performing final pitch performance analysis...")
@@ -314,7 +333,7 @@ class StudentPitchAnalyzerGUI:
                 else:
                     emotion_summary = "No emotion data available"
                 
-                final_result = analyze_student_pitch(emotion_summary, audio_result, audio_text)
+                final_result = analyze_student_pitch(emotion_summary, audio_result, audio_text,eye_contact_result)
                 if final_result:
                     self.analysis_results["Performance Analysis"] = final_result
                     self.root.after(0, lambda: self.final_text.insert(tk.END, final_result))
