@@ -39,6 +39,7 @@ dist/
 *.avi
 *.wav
 *.mp3
+*.png
 
 # Misc
 *.swp
