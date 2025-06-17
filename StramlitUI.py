@@ -71,6 +71,12 @@ try:
 except ImportError as e:
     MODULE_ERRORS["eye_contact"] = f"Could not import eye contact module. Error: {e}"
 
+try:
+    from eye_contact_optimized import calculate_eye_contact_loss
+    MODULE_HEALTH["eye_contact"] = True
+except ImportError as e:
+    MODULE_ERRORS["eye_contact"] = f"Could not import eye contact module. Error: {e}"
+
 
 # --- Custom CSS for Styling ---
 st.markdown("""
@@ -435,7 +441,7 @@ def main():
                 status_text.text("👁️ Analyzing eye contact...")
                 try:
                     analyzer.log_to_console("Running eye contact analysis...")
-                    results['eye_contact'] = analyze_eye_contact(video_path)
+                    results['eye_contact'] = calculate_eye_contact_loss(video_path)
                     analyzer.log_to_console("✅ Eye contact analysis complete.")
                 except Exception as e:
                     analyzer.log_to_console(f"❌ Eye contact analysis failed: {e}")
