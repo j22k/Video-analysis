@@ -10,7 +10,7 @@ if emotion_detection_path not in sys.path:
 
 # --- Import Custom Modules ---
 try:
-    from Emotiondetection.EmotionDetection import detect_emotions_from_video
+    from emotion_detection.EmotionDetection import detect_emotions_from_video
     from transcribe_audio import transcribe_audio
     from lanchain_deepseek import analyze_student_pitch
 except ImportError as e:

@@ -8,8 +8,8 @@ import os
 from PIL import Image
 
 # Import model definitions from the model.py file
-from Emotiondetection.model.model import ResNet50, LSTMPyTorch
-from Emotiondetection.model.utlis import pth_processing, get_box
+from emotion_detection.model.model import ResNet50, LSTMPyTorch
+from emotion_detection.model.utlis import pth_processing, get_box
 
 def detect_emotions_from_video(video_path):
     """
